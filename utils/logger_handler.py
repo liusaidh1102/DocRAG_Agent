@@ -1,3 +1,7 @@
+"""
+为整个项目提供统一的日志处理服务，基于logging库
+
+"""
 import logging
 from utils.path_tool import get_abs_path
 import os
@@ -16,10 +20,10 @@ DEFAULT_LOG_FORMAT = logging.Formatter(
 
 
 def get_logger(
-        name: str = "agent",
-        console_level: int = logging.INFO,
-        file_level: int = logging.DEBUG,
-        log_file = None,
+        name: str = "agent", # 配置日志的名字
+        console_level: int = logging.INFO, # 控制台的日志级别，只有满足此级别或者大于改级别的日志才会输出，对于debug日志不会输出
+        file_level: int = logging.DEBUG, # 文件的日志级别，只有满足此级别或者大于改级别的日志才会写入文件
+        log_file = None, # 日志文件的存放路径
 ) -> logging.Logger:
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
@@ -27,6 +31,8 @@ def get_logger(
     # 避免重复添加Handler
     if logger.handlers:
         return logger
+
+    # 可以配置多个handler
 
     # 控制台Handler
     console_handler = logging.StreamHandler()
@@ -48,7 +54,7 @@ def get_logger(
     return logger
 
 
-# 快捷获取日志器
+# 快捷获取日志器，使用的时候直接导入这个变量就行了
 logger = get_logger()
 
 
@@ -56,4 +62,5 @@ if __name__ == '__main__':
     logger.info("信息日志")
     logger.error("错误日志")
     logger.warning("警告日志")
+    # 不会写入控制台
     logger.debug("调试日志")

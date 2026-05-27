@@ -11,7 +11,7 @@ def get_project_root() -> str:
     """
     # 当前文件的绝对路径
     current_file = os.path.abspath(__file__)
-    # 获取工程的根目录，先获取文件所在的文件夹绝对路径
+    # 获取工程的根目录，先获取文件所在的文件夹绝对路径，就是utils目录
     current_dir = os.path.dirname(current_file)
     # 获取工程根目录
     project_root = os.path.dirname(current_dir)

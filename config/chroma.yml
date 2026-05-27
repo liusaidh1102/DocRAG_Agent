@@ -1,10 +1,11 @@
-collection_name: agent
+collection_name: agent # 向量存储的表名
 persist_directory: chroma_db
 k: 3
 data_path: data
 md5_hex_store: md5.text
 allow_knowledge_file_type: ["txt", "pdf"]
 
-chunk_size: 200
-chunk_overlap: 20
+# 文本分割器使用的
+chunk_size: 200 # 每个分片最大的大小
+chunk_overlap: 20 # 允许重叠的字符数量
 separators: ["\n\n", "\n", ".", "!", "?", "。", "！", "？", " ", ""]

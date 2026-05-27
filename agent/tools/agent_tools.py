@@ -1,3 +1,8 @@
+"""
+存放所有的工具
+
+
+"""
 import os
 from utils.logger_handler import logger
 from langchain_core.tools import tool
@@ -14,7 +19,7 @@ month_arr = ["2025-01", "2025-02", "2025-03", "2025-04", "2025-05", "2025-06",
 
 external_data = {}
 
-
+# 将整个rag封装成一个工具
 @tool(description="从向量存储中检索参考资料")
 def rag_summarize(query: str) -> str:
     return rag.rag_summarize(query)
@@ -39,7 +44,9 @@ def get_user_id() -> str:
 def get_current_month() -> str:
     return random.choice(month_arr)
 
-
+""""
+获取指定用户、指定月份的使用记录，从 records.csv 中读取
+"""
 def generate_external_data():
     """
     {
@@ -107,3 +114,7 @@ def fetch_external_data(user_id: str, month: str) -> str:
 @tool(description="无入参，无返回值，调用后触发中间件自动为报告生成的场景动态注入上下文信息，为后续提示词切换提供上下文信息")
 def fill_context_for_report():
     return "fill_context_for_report已调用"
+
+
+if __name__ == '__main__':
+    print(fetch_external_data("1001", "2025-01"))

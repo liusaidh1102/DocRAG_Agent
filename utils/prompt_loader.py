@@ -1,3 +1,9 @@
+"""
+提示词一般很大，都会配置到文件中去
+
+读取yaml中的文件路径，找到对应的文件，返回文件中的内容
+
+"""
 from utils.config_handler import prompts_conf
 from utils.path_tool import get_abs_path
 from utils.logger_handler import logger
@@ -11,7 +17,8 @@ def load_system_prompts():
         raise e
 
     try:
-        return open(system_prompt_path, "r", encoding="utf-8").read()
+        with open(system_prompt_path, "r", encoding="utf-8") as f:
+            return f.read()
     except Exception as e:
         logger.error(f"[load_system_prompts]解析系统提示词出错，{str(e)}")
         raise e
@@ -25,7 +32,8 @@ def load_rag_prompts():
         raise e
 
     try:
-        return open(rag_prompt_path, "r", encoding="utf-8").read()
+        with open(rag_prompt_path, "r", encoding="utf-8") as f:
+            return f.read()
     except Exception as e:
         logger.error(f"[load_rag_prompts]解析RAG总结提示词出错，{str(e)}")
         raise e
@@ -39,7 +47,8 @@ def load_report_prompts():
         raise e
 
     try:
-        return open(report_prompt_path, "r", encoding="utf-8").read()
+        with open(report_prompt_path, "r", encoding="utf-8") as f:
+            return f.read()
     except Exception as e:
         logger.error(f"[load_report_prompts]解析报告生成提示词出错，{str(e)}")
         raise e

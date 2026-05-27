@@ -19,10 +19,10 @@ def print_prompt(prompt):
 
 class RagSummarizeService(object):
     def __init__(self):
-        self.vector_store = VectorStoreService()
-        self.retriever = self.vector_store.get_retriever()
-        self.prompt_text = load_rag_prompts()
-        self.prompt_template = PromptTemplate.from_template(self.prompt_text)
+        self.vector_store = VectorStoreService() # 向量存储服务对象
+        self.retriever = self.vector_store.get_retriever() # 检索器对象
+        self.prompt_text = load_rag_prompts() # 加载rag提示文本
+        self.prompt_template = PromptTemplate.from_template(self.prompt_text) # 构建提示模板对象
         self.model = chat_model
         self.chain = self._init_chain()
 
@@ -30,6 +30,7 @@ class RagSummarizeService(object):
         chain = self.prompt_template | print_prompt | self.model | StrOutputParser()
         return chain
 
+    # 返回RAG检索的匹配的Document
     def retriever_docs(self, query: str) -> list[Document]:
         return self.retriever.invoke(query)
 

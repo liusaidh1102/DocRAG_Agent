@@ -8,23 +8,29 @@ from utils.file_handler import pdf_loader, txt_loader, listdir_with_allowed_type
 from utils.logger_handler import logger
 import os
 
+"""
+向量存储服务VectorStoreService：主要是将文件中的内容去准换成Document，然后存到向量数据库中去。
+"""
 
 class VectorStoreService:
     def __init__(self):
+        # 使用chroma数据库存储，获取chroma数据库实例
         self.vector_store = Chroma(
-            collection_name=chroma_conf["collection_name"],
-            embedding_function=embed_model,
-            persist_directory=chroma_conf["persist_directory"],
+            collection_name=chroma_conf["collection_name"], # 指定表名
+            embedding_function=embed_model, # 指定向量模型
+            persist_directory=chroma_conf["persist_directory"],# 指定数据库文件存储的路径
         )
-
+        # 文本分割器
         self.spliter = RecursiveCharacterTextSplitter(
             chunk_size=chroma_conf["chunk_size"],
             chunk_overlap=chroma_conf["chunk_overlap"],
             separators=chroma_conf["separators"],
-            length_function=len,
+            length_function=len, # 指定计算文本长度的函数,使用内置函数len
         )
 
+    # get函数：返回检索器对象
     def get_retriever(self):
+        # 调用chroma对象的方法，获取向量检索器对象
         return self.vector_store.as_retriever(search_kwargs={"k": chroma_conf["k"]})
 
     def load_document(self):
@@ -48,10 +54,12 @@ class VectorStoreService:
 
                 return False            # md5 没处理过
 
+        # a 是追加模式
         def save_md5_hex(md5_for_check: str):
             with open(get_abs_path(chroma_conf["md5_hex_store"]), "a", encoding="utf-8") as f:
                 f.write(md5_for_check + "\n")
 
+        # 根据文件夹拿到所有的Document对象
         def get_file_documents(read_path: str):
             if read_path.endswith("txt"):
                 return txt_loader(read_path)
