@@ -23,11 +23,13 @@ class ReactAgent:
             ]
         }
 
-        # 第三个参数context就是上下文runtime中的信息，就是我们做提示词切换的标记
+        # 第三个参数context就是上下文runtime中的信息，就是我们做提示词切换的标记，如果不设置，那边就是会为空，会报错
         for chunk in self.agent.stream(input_dict, stream_mode="values", context={"report": False}):
             latest_message = chunk["messages"][-1]
             if latest_message.content:
-                yield latest_message.content.strip() + "\n"
+                yield latest_message.content.strip() + "\n"  # 返回一个流式的生成器对象
+                # yield "hello"
+                # yield "World"
 
 
 if __name__ == '__main__':

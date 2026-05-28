@@ -1,3 +1,10 @@
+"""
+中间键：三个方法
+    1. 工具执行的监控
+    2. 在模型执行前输出日志
+    3. 动态切换提示词
+"""
+
 from typing import Callable
 from utils.prompt_loader import load_system_prompts, load_report_prompts
 from langchain.agents import AgentState
@@ -9,11 +16,13 @@ from langgraph.types import Command
 from utils.logger_handler import logger
 
 
+# 相当于spring中的一个aop
 @wrap_tool_call
 def monitor_tool(
-        # 请求的数据封装
+        # 请求的数据封装，相当于当前调用函数的一个入参
         request: ToolCallRequest,
-        # 执行的函数本身
+        # 执行的函数本身，相当于当前调用的一个函数
+        # 函数就相当于当前的Callable的一个抽象
         handler: Callable[[ToolCallRequest], ToolMessage | Command],
 ) -> ToolMessage | Command:             # 工具执行的监控
     logger.info(f"[tool monitor]执行工具：{request.tool_call['name']}")
@@ -24,7 +33,7 @@ def monitor_tool(
         logger.info(f"[tool monitor]工具{request.tool_call['name']}调用成功")
 
         if request.tool_call['name'] == "fill_context_for_report":
-            request.runtime.context["report"] = True
+            request.runtime.context["report"] = True # 向runtime中设置信息
 
         return result
     except Exception as e:
